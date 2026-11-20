@@ -1,0 +1,8 @@
+{
+  "appId": "com.eldjanp.tempulli",
+  "appName": "Gjurmët e Tempullit",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#0b0f0a"
+  }
+}

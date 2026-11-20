@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Gjurmët e Tempullit</title>
+<style>
+html,body{margin:0;height:100%;background:#0b0f0a;overflow:hidden;font-family:"Trebuchet MS",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#f6ecd4;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+canvas{display:block;touch-action:none}
+.serif{font-family:Georgia,"Times New Roman",serif}
+#hud{position:fixed;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 10px) 14px 0;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,.75)}
+#hud .big{font-size:30px;line-height:1;font-family:Georgia,serif;font-weight:700}
+#hud .small{font-size:13px;opacity:.9;font-weight:700}
+#hud .right{display:flex;gap:10px;align-items:flex-start}
+.pill{background:rgba(0,0,0,.38);border:1.5px solid rgba(255,214,110,.45);border-radius:20px;padding:5px 12px;font-size:17px}
+#pause{pointer-events:auto;background:rgba(0,0,0,.38);border:1.5px solid rgba(255,214,110,.6);color:#ffd66e;border-radius:12px;width:40px;height:40px;font-size:16px;font-weight:900;padding:0;cursor:pointer}
+.bar{height:6px;width:100px;background:rgba(0,0,0,.4);border-radius:3px;margin-top:6px;overflow:hidden;display:none}
+.bar i{display:block;height:100%}
+#toast{position:fixed;left:0;right:0;top:24%;text-align:center;font-family:Georgia,serif;font-weight:700;font-size:clamp(24px,7vw,40px);color:#ffe3a0;text-shadow:0 3px 0 #5a3410,0 6px 20px #000;opacity:0;transition:opacity .5s;pointer-events:none}
+#toast small{display:block;font-family:"Trebuchet MS",sans-serif;font-size:14px;letter-spacing:3px;color:#fff;opacity:.85}
+.ov{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(20,12,4,.35),rgba(5,8,5,.82));text-align:center;padding:24px;gap:12px}
+.hidden{display:none!important}
+h1{margin:0;font-family:Georgia,serif;font-weight:700;font-size:clamp(36px,10vw,60px);letter-spacing:1px;line-height:1.02;background:linear-gradient(#fff1c2,#ffc84a 55%,#c9781c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 #4e2a0a) drop-shadow(0 10px 16px rgba(0,0,0,.6))}
+.sub{opacity:.92;max-width:360px;font-size:15px;line-height:1.5}
+.help{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;text-align:left;font-size:14px;background:rgba(0,0,0,.35);border:1px solid rgba(255,214,110,.25);padding:12px 16px;border-radius:14px;max-width:340px}
+.help b{color:#ffd66e}
+button.go{font-family:Georgia,serif;background:linear-gradient(#ffd66e,#e0921c);color:#3a1f05;border:0;border-radius:14px;padding:14px 40px;font-size:21px;font-weight:700;cursor:pointer;box-shadow:0 5px 0 #8a5212,0 10px 22px rgba(0,0,0,.45);margin-top:6px;letter-spacing:1px}
+button.go:active{transform:translateY(3px);box-shadow:0 2px 0 #8a5212}
+button.go:disabled{opacity:.6}
+.stat{font-size:18px}
+.stat b{color:#ffd66e;font-size:26px}
+.credits{font-size:10px;opacity:.55;max-width:340px;line-height:1.4}
+#err{position:fixed;left:8px;right:8px;bottom:8px;font-size:12px;color:#fbb;white-space:pre-wrap;pointer-events:none}
+</style>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+<div id="hud" class="hidden">
+  <div>
+    <div class="big" id="score">0</div>
+    <div class="small"><span id="meters">0</span> m · Rekordi <span id="best">0</span></div>
+    <div class="bar" id="shieldbar"><i id="shieldfill" style="background:#4fd2ff"></i></div>
+    <div class="bar" id="magbar"><i id="magfill" style="background:#c77dff"></i></div>
+  </div>
+  <div class="right">
+    <div class="pill" id="coins">🪙 0</div>
+    <button id="pause" aria-label="Pauzë">II</button>
+  </div>
+</div>
+<div id="toast"></div>
+
+<div id="menu" class="ov">
+  <h1>Gjurmët e<br>Tempullit</h1>
+  <div class="sub">Ara, eksploruesja e guximshme, ka zgjuar rojet e tempullit të lashtë. Vrapo nëpër xhungël, varre, ura e male dhe mos u ndal.</div>
+  <div class="help">
+    <b>⇆ Rrëshqit</b><span>ndërro korsi · merr kthesat</span>
+    <b>⇧ Lart</b><span>kërce mbi trungje, gropa, gjarpërinj</span>
+    <b>⇩ Poshtë</b><span>rrëshqit nën harqe e maska</span>
+    <b>● Prek</b><span>gjuaj me amuletin e dritës</span>
+    <b>💎 Gur blu</b><span>mburojë 8 sekonda</span>
+    <b>🗿 Idhull</b><span>magnet për monedhat</span>
+  </div>
+  <button class="go" id="start" disabled>DUKE NGARKUAR… 0%</button>
+  <div class="credits">Ndriçim HDRI: Poly Haven (CC0) · Personazhi & animacionet: Mixamo · Ujku: PixelMannen (CC0), rig nga tomkranis (CC BY 4.0) · Motori: three.js (MIT)</div>
+</div>
+
+<div id="pauseov" class="ov hidden">
+  <h1>Pauzë</h1>
+  <button class="go" id="resume">VAZHDO</button>
+</div>
+
+<div id="over" class="ov hidden">
+  <h1 id="overtitle">Ara ra!</h1>
+  <div class="stat">Pikët: <b id="fscore">0</b></div>
+  <div class="stat"><b id="fdist" style="font-size:20px">0</b> m · 🪙 <b id="fcoins" style="font-size:20px">0</b> · Roje: <b id="fkills" style="font-size:20px">0</b></div>
+  <div class="stat" id="newbest" style="color:#7dff9a;font-weight:900"></div>
+  <div class="stat">Rekordi: <b id="fbest">0</b></div>
+  <button class="go" id="again">PROVO PËRSËRI</button>
+</div>
+<div id="err"></div>
+<script>window.addEventListener('error',e=>{const el=document.getElementById('err');if(el)el.textContent='Gabim: '+(e.message||e);});</script>
+<script type="module" src="./game.js"></script>
+</body>
+</html>
