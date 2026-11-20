@@ -45,7 +45,7 @@ button.go.small{padding:10px 20px;font-size:16px;margin:0}
 .credits{font-size:10px;opacity:.55;max-width:340px;line-height:1.4}
 #err{position:fixed;left:8px;right:8px;bottom:8px;font-size:12px;color:#fbb;white-space:pre-wrap;pointer-events:none}
 </style>
-<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/","@pixiv/three-vrm":"./vendor/three-vrm.module.min.js"}}</script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
 </head>
 <body>
 <div id="hud" class="hidden">
@@ -65,31 +65,30 @@ button.go.small{padding:10px 20px;font-size:16px;margin:0}
 <div id="menu" class="ov menu">
   <div class="top">
     <h1>Gjurmët e<br>Tempullit</h1>
-    <div class="sub">Ara, eksploruesja e guximshme, ka zgjuar rojet e tempullit të lashtë.</div>
+    <div class="sub">Shukli, komando i forcave speciale, ka zgjuar rojet e tempullit të lashtë. Tani duhet të vrapojë për jetën.</div>
   </div>
   <div class="bottom">
     <button class="go" id="start" disabled>DUKE NGARKUAR… 0%</button>
-    <div class="row"><button class="sec" id="showbtn">👁 Shiko Arën</button><button class="sec" id="qbtn">⚙ Grafika</button></div>
+    <div class="row"><button class="sec" id="showbtn">👁 Shiko Shuklin</button><button class="sec" id="qbtn">⚙ Grafika</button></div>
     <button class="link" id="helpbtn">Si luhet?</button>
     <div class="help hidden" id="help">
       <b>⇆ Rrëshqit</b><span>ndërro korsi · merr kthesat</span>
       <b>⇧ Lart</b><span>kërce mbi trungje, gropa, gjarpërinj</span>
       <b>⇩ Poshtë</b><span>rrëshqit nën harqe e maska</span>
-      <b>● Prek</b><span>gjuaj me amuletin e dritës</span>
+      <b>● Prek</b><span>qëllo me pistoletë</span>
       <b>💎 Gur blu</b><span>mburojë 8 sekonda</span>
       <b>🗿 Idhull</b><span>magnet për monedhat</span>
     </div>
-    <div class="credits">Ara: VRoid AvatarSample_A (pixiv) · Animacionet: Mixamo · Ndriçim: Poly Haven (CC0) · Ujku: PixelMannen (CC0), tomkranis (CC BY 4.0) · three.js, three-vrm (MIT)</div>
+    <div class="credits">Shukli & animacionet: Mixamo · Ndriçim: Poly Haven (CC0) · Ujku: PixelMannen (CC0), tomkranis (CC BY 4.0) · three.js (MIT)</div>
   </div>
 </div>
 
 <div id="show" class="hidden">
-  <div class="showtop"><b>Ara</b><span>Tërhiq me gisht për ta rrotulluar</span></div>
+  <div class="showtop"><b>SHUKLI</b><span>Tërhiq me gisht për ta rrotulluar</span></div>
   <div class="showbar">
     <button class="sec" data-m="orbit">🔄 360°</button>
     <button class="sec" data-m="face">🙂 Fytyra</button>
     <button class="sec" data-m="body">🧍 Trupi</button>
-    <button class="sec" id="outfitbtn">👗 <span id="outfitName">Veshja</span></button>
     <button class="go small" id="showback">◀ Kthehu</button>
   </div>
 </div>
@@ -100,7 +99,7 @@ button.go.small{padding:10px 20px;font-size:16px;margin:0}
 </div>
 
 <div id="over" class="ov hidden">
-  <h1 id="overtitle">Ara ra!</h1>
+  <h1 id="overtitle">Shukli ra!</h1>
   <div class="stat">Pikët: <b id="fscore">0</b></div>
   <div class="stat"><b id="fdist" style="font-size:20px">0</b> m · 🪙 <b id="fcoins" style="font-size:20px">0</b> · Roje: <b id="fkills" style="font-size:20px">0</b></div>
   <div class="stat" id="newbest" style="color:#7dff9a;font-weight:900"></div>

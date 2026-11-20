@@ -47,7 +47,7 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.${{ github.run_number }}
-          name: Gjurmët e Tempullit v1.1.${{ github.run_number }}
+          tag_name: v1.2.${{ github.run_number }}
+          name: Gjurmët e Tempullit v1.2.${{ github.run_number }}
           body: APK gati për instalim në Android. Shkarko GjurmetETempullit.apk dhe hape në telefon.
           files: GjurmetETempullit.apk

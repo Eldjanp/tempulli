@@ -2,12 +2,12 @@
 
 Lojë vrapimi pa fund në 3D (three.js), e paketuar si aplikacion Android me Capacitor.
 
-Ara vrapon nëpër katër zona: Xhungla e Artë, Varret e Harruara, Ura mbi Greminë dhe Tempulli i Maleve.
+Shukli, komandoja, vrapon nëpër katër zona: Xhungla e Artë, Varret e Harruara, Ura mbi Greminë dhe Tempulli i Maleve.
 
 ## Kontrollet
 - Rrëshqit majtas/djathtas: ndërro korsi ose merr kthesën
 - Rrëshqit lart: kërce · Rrëshqit poshtë: rrëshqit
-- Prek ekranin: gjuaj me amuletin
+- Prek ekranin: qëllo me pistoletë
 
 ## APK
 Çdo push në `main` ndërton automatikisht APK-në (GitHub Actions) dhe e publikon te **Releases**.
