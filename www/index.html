@@ -29,16 +29,29 @@ button.go:active{transform:translateY(3px);box-shadow:0 2px 0 #8a5212}
 button.go:disabled{opacity:.6}
 .stat{font-size:18px}
 .stat b{color:#ffd66e;font-size:26px}
+.ov.menu{justify-content:space-between;background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0) 28%,rgba(0,0,0,0) 55%,rgba(0,0,0,.8));padding:calc(env(safe-area-inset-top) + 28px) 18px calc(env(safe-area-inset-bottom) + 18px)}
+.ov.menu .top,.ov.menu .bottom{display:flex;flex-direction:column;align-items:center;gap:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+button.sec{font-family:inherit;background:rgba(20,14,6,.55);color:#ffe3a0;border:1.5px solid rgba(255,214,110,.55);border-radius:12px;padding:10px 14px;font-size:15px;font-weight:700;cursor:pointer}
+button.sec.on{background:#ffd66e;color:#3a1f05}
+button.link{background:none;border:0;color:#ffd66e;text-decoration:underline;font-size:14px;cursor:pointer}
+#show{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,0) 18%,rgba(0,0,0,0) 70%,rgba(0,0,0,.6))}
+#show .showtop{padding:calc(env(safe-area-inset-top) + 16px) 16px 0;text-align:center}
+#show .showtop b{display:block;font-family:Georgia,serif;font-size:38px;color:#ffd66e;text-shadow:0 3px 10px #000}
+#show .showtop span{font-size:13px;opacity:.85}
+#show .showbar{pointer-events:auto;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 12px calc(env(safe-area-inset-bottom) + 16px)}
+button.go.small{padding:10px 20px;font-size:16px;margin:0}
+#fps{font-size:11px;opacity:.7;font-weight:600}
 .credits{font-size:10px;opacity:.55;max-width:340px;line-height:1.4}
 #err{position:fixed;left:8px;right:8px;bottom:8px;font-size:12px;color:#fbb;white-space:pre-wrap;pointer-events:none}
 </style>
-<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/","@pixiv/three-vrm":"./vendor/three-vrm.module.min.js"}}</script>
 </head>
 <body>
 <div id="hud" class="hidden">
   <div>
     <div class="big" id="score">0</div>
-    <div class="small"><span id="meters">0</span> m · Rekordi <span id="best">0</span></div>
+    <div class="small"><span id="meters">0</span> m · Rekordi <span id="best">0</span> · <span id="fps"></span></div>
     <div class="bar" id="shieldbar"><i id="shieldfill" style="background:#4fd2ff"></i></div>
     <div class="bar" id="magbar"><i id="magfill" style="background:#c77dff"></i></div>
   </div>
@@ -49,19 +62,36 @@ button.go:disabled{opacity:.6}
 </div>
 <div id="toast"></div>
 
-<div id="menu" class="ov">
-  <h1>Gjurmët e<br>Tempullit</h1>
-  <div class="sub">Ara, eksploruesja e guximshme, ka zgjuar rojet e tempullit të lashtë. Vrapo nëpër xhungël, varre, ura e male dhe mos u ndal.</div>
-  <div class="help">
-    <b>⇆ Rrëshqit</b><span>ndërro korsi · merr kthesat</span>
-    <b>⇧ Lart</b><span>kërce mbi trungje, gropa, gjarpërinj</span>
-    <b>⇩ Poshtë</b><span>rrëshqit nën harqe e maska</span>
-    <b>● Prek</b><span>gjuaj me amuletin e dritës</span>
-    <b>💎 Gur blu</b><span>mburojë 8 sekonda</span>
-    <b>🗿 Idhull</b><span>magnet për monedhat</span>
+<div id="menu" class="ov menu">
+  <div class="top">
+    <h1>Gjurmët e<br>Tempullit</h1>
+    <div class="sub">Ara, eksploruesja e guximshme, ka zgjuar rojet e tempullit të lashtë.</div>
   </div>
-  <button class="go" id="start" disabled>DUKE NGARKUAR… 0%</button>
-  <div class="credits">Ndriçim HDRI: Poly Haven (CC0) · Personazhi & animacionet: Mixamo · Ujku: PixelMannen (CC0), rig nga tomkranis (CC BY 4.0) · Motori: three.js (MIT)</div>
+  <div class="bottom">
+    <button class="go" id="start" disabled>DUKE NGARKUAR… 0%</button>
+    <div class="row"><button class="sec" id="showbtn">👁 Shiko Arën</button><button class="sec" id="qbtn">⚙ Grafika</button></div>
+    <button class="link" id="helpbtn">Si luhet?</button>
+    <div class="help hidden" id="help">
+      <b>⇆ Rrëshqit</b><span>ndërro korsi · merr kthesat</span>
+      <b>⇧ Lart</b><span>kërce mbi trungje, gropa, gjarpërinj</span>
+      <b>⇩ Poshtë</b><span>rrëshqit nën harqe e maska</span>
+      <b>● Prek</b><span>gjuaj me amuletin e dritës</span>
+      <b>💎 Gur blu</b><span>mburojë 8 sekonda</span>
+      <b>🗿 Idhull</b><span>magnet për monedhat</span>
+    </div>
+    <div class="credits">Ara: VRoid AvatarSample_A (pixiv) · Animacionet: Mixamo · Ndriçim: Poly Haven (CC0) · Ujku: PixelMannen (CC0), tomkranis (CC BY 4.0) · three.js, three-vrm (MIT)</div>
+  </div>
+</div>
+
+<div id="show" class="hidden">
+  <div class="showtop"><b>Ara</b><span>Tërhiq me gisht për ta rrotulluar</span></div>
+  <div class="showbar">
+    <button class="sec" data-m="orbit">🔄 360°</button>
+    <button class="sec" data-m="face">🙂 Fytyra</button>
+    <button class="sec" data-m="body">🧍 Trupi</button>
+    <button class="sec" id="outfitbtn">👗 <span id="outfitName">Veshja</span></button>
+    <button class="go small" id="showback">◀ Kthehu</button>
+  </div>
 </div>
 
 <div id="pauseov" class="ov hidden">
@@ -76,6 +106,7 @@ button.go:disabled{opacity:.6}
   <div class="stat" id="newbest" style="color:#7dff9a;font-weight:900"></div>
   <div class="stat">Rekordi: <b id="fbest">0</b></div>
   <button class="go" id="again">PROVO PËRSËRI</button>
+  <button class="sec" id="menubtn">☰ Menuja</button>
 </div>
 <div id="err"></div>
 <script>window.addEventListener('error',e=>{const el=document.getElementById('err');if(el)el.textContent='Gabim: '+(e.message||e);});</script>
